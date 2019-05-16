@@ -1,0 +1,1847 @@
+---
+title: "R studio learning"
+author: "adfghk"
+output: 
+  html_document:
+    toc: TRUE
+    theme: united
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##1.Introduce to R Progamming
+###What is statistical programming?
+
+Computer programming involves controlling computers,telling them what calculations to do,what to display,etc.
+One definition might be that it is the kind of computer programming statisticians do-but statisticians do all sors of porgramming.Another would be that it is kind of programming one does when one is doing statistics-but again,satistics involves a wide variety of computing tasks.
+Statistical programming involves doing computations to aid in statistical analysis.
+
+###Starting and quitting R
+The greater than sign(>)is the prompt symbol.When this appears,you can begin typing commands.
+We can type simple arithmetical expression at the >prompt.
+```{r}
+5+49
+```
+
+the [1] indicates that this is the first result from the command.Other commands returns multiple values,and each line of results will be labeled to aid the user in deciphering the output.
+
+
+Take a command for example.
+```{r}
+options(width=40)
+1:20
+```
+
+Here are some additinal examples for calculator.
+```{r,eval=FALSE}
+3*5
+3-8
+12/4
+```
+
+If you want to quit your R session,type
+```{r,eval=FALSE}
+q()
+```
+
+##2.Basic features of R
+### Calculating with R
+
+We saw in the previous section that it can be used to do scalar arithmetic.
+```{r}
+3 ^ 4
+31 %% 7
+31 %/% 7
+7*4+3
+```
+
+
+
+
+### Named storage
+(設未知數的概念)
+
+For example,suppose we would like to store  the result of the calculation 1.0025^30 for future use.We will assign this value to an object called _interest.30_.To this,we type
+```{r}
+interest.30 <- 1.0023^30
+```
+We tell R to make the assignment using an arrow that points to the left.
+
+We can see the results of this assignment by typing the name of our new object at the prompt:
+```{r}
+interest.30
+```
+
+Take other examples of named storage.
+
+Example1
+
+```{r}
+intRate <- 0.01
+n <- 10
+principal <- 1500
+payment <- principal * intRate / (1-(1+intRate)^(-n))
+payment
+```
+
+Example2
+
+Consider the standard formula for the sample variance of the sample x1,...,xn:
+
+$S^2$=$\frac{1}{n-1}$ $\sum_{i=0}^{n}$ $(x{i}-\overline{x})^2$
+
+where $\overline{x}$ is the sample mean,$\frac{1}{n}$ $\sum_{i=0}^n$ $xi$.  
+In R,$S^2$ is avaliable as var(),and $\overline{x}$ is mean().For example:
+```{r}
+x <- 1:11
+mean(x)
+var(x)
+sum((x-mean(x))^2)/10
+```
+
+
+
+
+
+###Vectors
+
+A numeric vector is a list of numbers.
+
+The c() function is used to collect things together into the vector.We can type
+```{r}
+c(0,7,8)
+```
+
+Also,we can assign this to a named object
+```{r}
+x<- c(0,7,8)
+x
+```
+
+
+```{r}
+numbers5to20 <- 5:20
+numbers5to20
+```
+
+
+Vectors can be join together.
+```{r}
+c(numbers5to20,x)
+```
+
+
+There are some other examples:
+```{r}
+number100to200<- 100:200
+number100to200[22]
+
+number100to200[c(1:10,30:40)]
+```
+
+
+
+###Simple patterned vectors
+
+Patterned vectors can also be produced using the seq() function as well as the rep() function.
+
+Consider the following example:
+```{r}
+rep(3,12)  #repeat the value3 for 12 times
+rep(seq(2,20,by=2),2) #repeat the pattrn 2 4....20,twice
+rep(c(1,4),c(3,2)) #repeat 1,3 times and 4,twice
+rep(c(1,4),each=3) #repeat each value 3 times
+rep(seq(2,20,2),rep(2,10)) #repeat each value twice
+rep(c(2,3,4),each=3)
+rep(10,5)
+rep(seq(11,30,by=3),3)
+rep(c(2,3,4),each=3)
+rep(seq(11,30,by=3),rep(3,7))#想成線代:seq(11,30,by=3)x(3,3,3,3,3,3,3)
+rep(seq(11,30,by=3),rep(5,7))
+
+
+rep(seq(11,30,by=3),c(rep(3,3),rep(4,4)))
+
+rep(seq(11,30,by=3),c(3,3,3,4,4,4,4))
+
+rep(c(11,14,17,20,23,26,29),c(3,3,3,4,4,4,4))
+```
+
+###Missing value and other special value
+
+The missing value symbol is NA.Missing value often arise in real data problems,but they can also arise because of the way calculations are performed.
+
+```{r}
+some.evens<- NULL #create a vector with no elements
+some.evens[seq(2,20,2)] <- seq(2,20,2)
+some.evens
+```
+
+
+Take x for example.
+
+```{r}
+x=c(0,10,20)
+x[-3]
+x[-1]
+x[-c(1,2)]
+x[0]
+x[c(0,2)]
+x-NULL
+x[seq(2,20,2)]=seq(1,20,2)
+x
+x=c(0,10,20)
+x/x
+1/x
+x[0.4]
+x[0.99]
+x[1.1]
+```
+
+###Character vectors
+
+Scalars and vectors can be made up of strings of characters instead of numbers.
+
+For example,
+```{r}
+colors=c("brown","yellow","blue")
+more.colors=c(colors,"green","magenta","cyan") #append some new elements to colors
+
+z=c("brown","yellow",1)
+z
+more.colors
+```
+
+There are two operations you might perform.
+
+
+substr() is the former takes argument substr(x,start,stop),where x is the vector of charater strings,and _start_
+and _stop_ say which character to keep.
+```{r}
+substr(colors,2,3)
+```
+
+
+The other basic operation is building up strings by concatenation.Use the paste() function for this.For example:
+
+```{r}
+paste(colors,"candy")
+
+paste0(colors,"candy")
+
+paste0(colors,"-","candy")
+
+paste(colors,c(colors,"red"))
+
+paste(colors,c(colors,"red"),sep=" ")
+
+paste(colors,c(colors,"red"),sep=":")
+
+paste("several",colors,"s",sep="")
+
+paste("I like",colors,collapse=",")
+```
+
+###Factors
+
+Factors offer an alternative way of storing character data.
+
+For example,
+```{r}
+fac=c("A","B","A","B")
+fac
+
+fac=factor(fac)
+fac
+
+as.factor(fac)
+```
+
+
+
+```{r}
+fac2=c("AAAAAAAAAA","ABABABABAB","AAAAAAAAAA","ABABABABAB",1111)
+fac2
+
+fac2=factor(fac2)
+fac2
+
+as.integer(fac2)
+```
+
+
+```{r}
+fac3=fac2[-5]
+fac3
+as.integer(fac3)
+```
+
+
+The labels for the labels are only stored once each,rather than being repeated.The codes are indices into the vector of levels:
+
+```{r}
+grp <- c("control","treatment","control","treatment")
+grp
+
+grp <- factor(grp)
+grp
+
+as.integer(grp)
+
+levels(grp)
+
+levels(grp)[as.integer(grp)]
+```
+
+
+###More on exacting elements from vectors
+
+As for numeric vectors,square brackets[] are used to index factor and character vector elements.
+
+For example,grp has four elements,so we can print out the third element by typing
+```{r}
+grp[3]
+more.colors[2:5]
+```
+
+When there may be missing valus,tje is.na() function should be used to detect them.
+```{r}
+is.na(some.evens)
+```
+
+We can located the non-missing values in some.evens as follows:
+```{r}
+!is.na(some.evens)
+```
+
+We can then display the even numbers only:
+```{r}
+some.evens[!is.na(some.evens)]
+```
+
+
+###Matrix and arrays
+
+To arrange values into the matrix
+
+```{r}
+m2 <- matrix(1:6,nrow=2,ncol=3)
+m2
+
+m2[1,2] #the value in first row and second column
+
+m2[4]
+
+m2[1,]
+
+m2[,1]
+```
+
+A more way to store data is in the _array_. Arrays have multiple indices.
+```{r}
+a <- array(1:24,c(3,4,2))
+a
+```
+
+Example3
+```{r}
+
+color=c("red","red","red1","blue")
+number=c(1,3,5,7)
+logic=c(T,T,F,F)
+
+out.fr=data.frame(colors=color,numbers=number,logics=logic)
+#每一行可以存不同格式的資料
+out.fr
+
+
+out.fr=data.frame(color,number,logics=logic)
+out.fr
+
+out.fr
+
+out.fr[ ,2] #call by position
+out.fr[ ,"number"] #call by name
+out.fr$number #call by name
+
+2*out.fr #文字不能存 邏輯值可以存，直接乘
+class(out.fr)
+class(m2)
+class(out.fr$color)
+class(color)
+
+
+out.fr["number"]
+
+class(out.fr[ ,"number"])
+class(out.fr["number"])
+```
+
+###Built in graphics functions 
+
+Two basic plots are the histogram and the scatterplot.
+
+(1)Histogram
+```{r}
+x<-c(12,15,13,20,14,16,10,10,8,15)
+hist(x)
+```
+
+(2)Scatterplot
+```{r}
+x <- seq(1,10)
+y <- x^2-10*x
+plot(x,y)
+```
+
+(3)A simple example involves plotting the sine function on the interval [0,6pi]:
+```{r}
+curve(expr=sin,from=0,to=6*pi)
+```
+The expr parameter is either a function or an expression in terms of x.
+
+(4)
+```{r}
+curve(x^2-10*x,from=1,to=10)
+```
+
+###Logical vectors and relational operators
+
+We have used the c() function to put numeric vectors together as well as character vectors.
+
+```{r}
+a=c(TRUE,FALSE,FALSE,TRUE)
+b=c(13,7,8,2)
+b[a]
+sum(a)
+```
+
+If we attempt logical operations on a numerical vector,0 is taken to be FALSE,and any nonzero value is taken to be TRUE
+```{r}
+!a
+```
+
+Example4
+```{r}
+a=c(3,5,7)
+b=c(1,5,8)
+a[a>b]
+```
+
+###Data input and output
+
+When in an R session,it is possible to read and write data to files outside of R.
+
+
+Example5
+```{r}
+x=c(1:100,201:300)
+hist.x=hist(x)
+```
+
+Use the setwd() function,and all data input and output will default to the mydata folder in the D:drive.
+```{r,eval=FALSE}
+setwd("D:/mydata")
+```
+
+In order to save a object for a future session type:
+```{r,eval=FALSE}
+dump("hist.x","hist.x.R") 
+```
+
+To retrieve the vector in a future session,type:
+```{r,eval=FALSE}
+source("hist.x.R")
+```
+
+To save all the objects that you have crated during a session,type:
+```{r,eval=FALSE}
+dump(list=objects(),"all.R")
+```
+
+ 
+ 
+ 
+###Redicting R output
+
+Output can be directed to a file with the sink() function.
+
+For example,consider the greenhouse data in the vector solar.radiation,type:
+```{r,eval=FALSE}
+sink("solarmean.txt") #create a file solarmean.txt for output
+mean(solar.radiation) #write mean value of it
+sink() #close solarmean.txt,print new output
+```
+
+
+
+Example6
+```{r}
+sink("try2.txt")
+y=1:10
+x=sin(y)
+sink()
+```
+
+
+###Saving and retrieving image files
+
+If R is started in another directory,the load() function may be used to load the workspce image.
+It is possible to save workspce images without quitting.
+For example,
+```{r.eval=FALSE}
+save.image("temp.RData")
+load("temp.RData")
+```
+
+
+###Data frames and the read.table function
+
+Data sets frequently consist of more than one column represents measurements of a single variable.Each row usually represents a single observation.
+
+If such a data set is stored in a file,then it can be read into an R data frame.Typing:
+```{r,eval=FALSE}
+pretend.df=read.table("D:/pretend.dat",header=F)
+pretend.df
+```
+
+```{r,eval=FALSE}
+pretend.df=read.table("D:/pretend.dat",header=T)
+pretend.df$z
+```
+
+###Lists
+
+Example7
+```{r}
+x <- c(3,2,3)
+y <- c(7,7)
+list(x=x,y=y)
+x
+y
+```
+
+##3.Progamming statistical graphics
+
+
+
+```{r}
+VADeaths
+```
+
+
+(1)bar charts
+the beside=TRUE argument causes the values in each column to be plotted side by side
+legend=TRUE causes the legend in the top right to be added.
+ylime=c(0,90) argument modifies the vertical scale of the graph to make room for the legend.
+```{r}
+barplot(VADeaths,beside=TRUE,legend=TRUE,ylim=c(0,90),
+ ylab="Deaths per 1000",
+ main="Death rates in Virginia")
+```
+
+
+(2)dot charts
+
+```{r}
+dotchart(VADeaths,xlim=c(0,75),
+ xlab="Death per 1000",
+ main="Death rates in Virginia")
+```
+
+
+(3)pie charts
+```{r}
+groupsizes<- c(18,30,32,10,10)
+labels<-c("A","B","C","D","F")
+pie(groupsizes,labels,col=c("grey40","white","grey","black","grey90"))
+```
+
+
+(4)histograms
+
+a.
+```{r}
+x<-rnorm(100)
+hist(x)
+```
+
+b.
+```{r}
+hist(x,breaks=5)
+```
+
+c.
+```{r}
+hist(x,10)
+
+hist(x,breaks=10)
+```
+
+
+(5)box plots
+
+a.
+```{r}
+boxplot(Sepal.Length ~ Species , data=iris,
+ yab="Sepal length(cm)",main="Iris measurements",
+ boxwex=0.5)
+```
+
+
+b.
+```{r}
+boxplot(Sepal.Length ~ Species,data=iris,
+ yab="Sepal length(cm)",main="Iris measurements",
+ boxwex=0.1)
+```
+
+
+(6)scatter plots
+
+```{r}
+x<-rnorm(100) #assign 100 random normal observations to x
+y<-rpois(100,30) #assign 100 random poisson observations to y,mean value is 30
+mean(y) #the resulting value should be near 30
+plot(x,y,main="Poisson versus Normal")
+
+#other try
+plot(x,y) #plots a broken line
+plot(sort(x),sort(y)) #a plot of the sample "quentiles"
+
+```
+
+
+(7)qqplots
+
+```{r}
+X<-rnorm(1000)
+
+A<-rnorm(1000)
+qqplot(X,A,main="A and X are the same")
+
+B<- rnorm(1000,mean=3,sd=2)
+qqplot(X,B,main="B is rescaled X")
+
+C<-rt(1000,df=2)
+qqplot(X,C,main="D is skewed to the right")
+
+
+D<-exp(rnorm(2000))
+qqplot(X,D,main="D is sknewed to the right")
+
+```
+
+
+###Adding to plots
+程式碼                         |功能
+-------------------------------|--------------------------------
+`points(x,y,...)`              |  
+`lines(x,y,...)`               |adds lines segments  
+`text(x,y,labels,..)`          |adds text into the graph
+`obline(a,b,...)`              |adds the line y=a+bx
+`abline(h=y,...)`              |adds a horizontal line
+`abline(v=x,...)`              |adds a vertical lines 
+`polygon(x, y, ...)`           |adds a closed and possibly filled polygon
+`segments(x0, y0, x1, y1, ...)`| draws line segments
+`arrows(x0, y0, x1, y1, ...)`  |draws arrows
+`symbols(x, y, ...)`           |draws circles, squares, thermometers, etc.
+`legend(x, y, legend, ...)`    |draws a legend.
+
+
+**Example8**  
+We will use measurements which are stored in a data frame called indexfinger.
+```{r,eval=FALSE}
+indexfinger=read.table("d:/indexfinger.txt",header=r)
+```
+
+Then we can create a simple scatter plot.
+```{r,eval=FALSE}
+plot(width~length,data=indexfinger)
+```
+
+Suppose that after plotting this figure, we decide to highlight the male
+and female with the longest fingers.  
+We will use the
+points() function to plot additional points on the graph on top of the
+original ones with the following code
+```{r,eval=FALSE}
+with(indexfinger[c(3, 7),], points(length, width, pch=16)) #the pch=16 argument changes the plotting character from the default open circle to a solid black dot.
+```
+
+Another possibility would be to specify the pch value in the original
+call to plot()
+````{r,eval=FALSE}
+plot(width ˜ length, pch=as.character(sex), data=indexfinger)
+```
+
+We could then add linear regression lines for the males and the females,
+and a legend to identify them.
+```{r,eval=FALSE}
+abline(lm(width ˜ length, data=indexfinger, subset=sex=="M"), lty=1)
+abline(lm(width ˜ length, data=indexfinger, subset=sex=="F"), lty=2)
+legend("topleft", legend=c("Male", "Female"), lty=1:2)
+```
+
+
+####One may also wish to annotate graphs outside the plot region.  
+Several functions exist to do this:
+
+程式碼                             |功能
+-----------------------------------|-----------------------------------
+`title(main, sub, xlab, ylab, ...)`|adds a main title, a subtitle, an x-axis label and/or a y-axis label
+`mtext(text, side, line, ...)`     |draws text in the margins
+`axis(side, at, labels, ...)`      |adds an axis to the plot
+`box(...)`                         | adds a box around the plot region.
+
+
+**Example9**
+```{r}
+par(mar=c(5, 5, 5, 5) + 0.1)
+plot(c(1, 9), c(0, 50), type="n", xlab="", ylab="")
+text(6, 40, "Plot region")
+points(6, 20)
+text(6, 20, "(6, 20)", adj=c(0.5, 2))
+mtext(paste("Margin", 1:4), side=1:4, line=3)
+mtext(paste("Line", 0:4), side=1, line=0:4, at=3, cex=0.6)
+mtext(paste("Line", 0:4), side=2, line=0:4, at=15, cex=0.6)
+mtext(paste("Line", 0:4), side=3, line=0:4, at=3, cex=0.6)
+mtext(paste("Line", 0:4), side=4, line=0:4, at=15, cex=0.6)
+```
+
+###Setting graphical parameter
+
+After a device is opened, other graphical parameters may be set using
+the par(...) function.  
+This function controls a very large number of parameters.For example,
+
+程式碼                             |功能
+-----------------------------------|---------------------------------
+`mfrow=c(m, n)`                    |tells R to draw m rows and n columns of plots, rather than going to a new page for each plot.
+`mfg=c(i, j)`                      |says to draw the figure in row i and column j next.
+`ask=TRUE`                         | tells R to ask the user before erasing a plot to draw a new one.
+`cex=1.5`                          |tells R to expand characters by this amount in the plot region.
+`mar=c(side1, side2, side3, side4)`| sets the margins of the plot to the given numbers of lines of text on each side.
+`oma=c(side1, side2, side3, side4)`|sets the outer margins.
+`usr=c(x1, x2, y1, y2)`            | sets the coordinate system within the plot with x and y coordinates on the given ranges.
+
+
+The par() function is set up to take arguments in several forms.  
+If you give character strings (e.g. par("mfrow")), the function will return the
+current value of the graphical parameter.  
+If you provide named arguments,you will set the corresponding parameter,and the previous value will be returned in a list.  
+Finally, you can use a list as input to set several parameters at once.
+
+
+
+##4.Programming with R
+
+###The **for()** loop
+
+The for() statement allows one to specify that a certain operation should be repeated a fixed number of times.
+
+For example,
+```{r}
+Fibonacci <- numeric(12)
+Fibonacci[1] <- Fibonacci[2] <- 1
+for (i in 3:12) Fibonacci[i] <- Fibonacci[i - 2] + Fibonacci[i - 1]
+Fibonacci
+```
+
+
+###The if() statement
+
+The if()statement allows us to control which
+statements are executed, and sometimes this is more convenient.
+
+```{r}
+x=3
+if(x>2) y=x^2 else y=cos(x)
+y
+
+x=1
+if(x>2) y=x^2 else y=cos(x)
+y
+
+x=1
+if(x==2) y=x^2 else y=cos(x)
+y
+
+x=1
+if(x!=2) y=x^2 else y=cos(x)
+y
+```
+
+
+**Example10**
+```{r}
+
+corplot <- function(x,y,plotit) {
+ if(plotit==TRUE) plot(x,y)
+ cor(x,y)
+}
+```
+
+```{r}
+corplot(c(1,3,5,7),c(2,2,10,2),F)
+```
+
+```{r}
+corplot(c(1,3,5,7),c(2,2,10,2),T)
+```
+
+
+**Example11**
+```{r}
+Eratosthenes <- function(n) {
+  #Return all prime numbers up to n (based on the sieve of Eratosthenes)
+  if (n >=2) {
+    sieve <- seq(2,n)
+    primes <- c()
+    for (i in seq(2,n)) {
+      if (any(sieve==i)) {
+        primes <- c(primes,i)
+        sieve <- c(sieve[(sieve%%i)!=0],i)
+      }
+    }
+    return(primes)
+  } else {
+      stop("Input value of n should be at least 2.")
+  }
+}
+```
+
+###The while() loop
+
+
+**Example12**
+```{r}
+Fib1 <- 1
+Fib2 <- 1
+Fibonacci <- c(Fib1,Fib2)
+while (Fib2<300) {
+	Fibonacci <- c(Fibonacci,Fib2)
+	oldFib2 <- Fib2
+	Fib2 <- Fib1+Fib2
+	Fib1 <- oldFib2
+}
+```
+
+
+**Example13**
+```{r}
+Fib1 <- 1
+Fib2 <- 1
+Fibonacci <- c(Fib1,Fib2)
+while (Fib2<300) {
+	Fibonacci <- c(Fibonacci,Fib2)
+	n=length(Fibonacci)
+	Fib2=Fibonacci[n-1]+Fibonacci[n]
+}
+Fibonacci
+```
+
+
+**Example14**
+```{r}
+Fibonacci <- c(1,1)
+while (Fibonacci[length(Fibonacci)]+Fibonacci[length(Fibonacci)-1]<300) {
+	Fibonacci <- c(Fibonacci,Fibonacci[length(Fibonacci)-1]+Fibonacci[length(Fibonacci)])
+}
+Fibonacci
+```
+
+
+
+
+
+###Using fix()
+
+Sometimes we make errors when we write functions.To help us replace the
+incorrect version with a new one, the fix()function can be used to make
+corrections.  
+fix()can also be used to create functions.
+
+###Documentation using  "#"
+
+The "#" symbol is a simple way of inserting comments such as titles and descriptions into R functions and scripts.  
+R ignores all text from the "#" character to the end of the line.
+
+###Some other function to use
+
+(1)
+>sort()
+
+We might use sort() to sorting the vector consisting of some elements.For example,
+```{r}
+x<- c(3,5,24,6,2,4,13,1)
+sort(x)
+sort(c(2,1))
+sort(c(2,24,3,4,5,13,6,1))
+```
+
+
+**Example15**
+```{r}
+sort1 <- function(x) {
+  # x is initially the input vector and will be modified to form the output
+  # first is compared with last
+  for (last in length(x):2) {
+    for (first in 1: (last-1)) {
+      if (x[first] > x[first + 1]) {
+        save <- x[first]
+        x[first] <- x[first + 1]
+        x[first + 1] <- save
+      }
+    }
+  }
+  return(x)
+}
+sort(1)
+```
+
+
+**Example16**
+```{r}
+mergesort = function(x) {
+  #Check for a vector that doesn't need sorting
+  len = length(x)
+  if (len < 2) result = x
+  else {
+    #2: sort x into result
+    #2.1: split x in half
+    y = x[1:(len/2)]
+    z = x[(len/2+1):len]
+    #2.2: sort y and z
+    y = mergesort(y)
+    z = mergesort(z)
+    #2.3: merge y and z into a sorted result
+    result=c()
+    #2.3.1: while (some are left in both piles)
+    while (min(length(y), length(z)) > 0) {
+      #2.3.2: put the smallest first element on the end
+      #2.3.3: remove it from y or z
+      if (y[1] < z[1]) {
+        result = c(result, y[1])
+        y = y[-1]
+      } else {
+        result = c(result, z[1])
+        z= z[-1]
+      }
+    }
+    #2.3.4: put the leftovers onto the end of result
+    if(length(y) >0) {
+      result = c(result,y)
+    } else {
+      result = c(result,z)
+    }
+  }
+  return(result)
+}
+
+mergesort(c(1,5,3,4))
+```
+
+
+(2)
+>traceback()
+
+In R, you can obtain extra information about an error message using the traceback() function.  
+When an error occurs, R saves information about the current stack of active functions, and traceback() prints this list.
+
+For example,
+```{r,eval=FALSE}
+cv <- function(x) {
++ sd(x / mean(x))
++ }
+cv(0)
+```
+Error in var(x, na.rm = na.rm) : missing observations in cov/cor  
+The error message talks about the function var(), which we didn’t use.  
+To find out where it was called from, we use traceback():
+```{r,eval=FALSE}
+traceback()
+```
+
+
+
+(3) 
+>browser()
+
+Rather than using cat() or print() for debugging, R allows you to call the function browser().  
+This will pause execution of your function, and allow you to examine (or change!) local variables, or execute any other R command, inside the evaluation environment of the function.  
+You can also execute a debugger command:
+
+command          |function
+-----------------|-----------------
+n – “next”       |execute the next line of code, single-stepping through the function
+c – “continue”   |let the function continue running
+Q –              |quit the debugger.
+
+--------------------------------------------------
+
+(4)
+>debug()
+
+Another way to enter the browser is to use the debug() function.You mark function f for debugging using debug(f), and then the browser will be called when you enter the function.  
+Turn off debugging using undebug(f).
+
+
+###Learning your tools
+
+R is designed to work with vectors.  
+Operations on whole vectors are usually much faster than working one element at a time.  
+Summing two vectors could be done as follows:
+```{r}
+X = rnorm(100000) # Xi ~ N(0,1) i=1,...,100000
+Y = rnorm(100000) # Yi ~ N(0,1) i=1,...,100000
+Z = c()
+
+for (i in 1:100000) {
+  Z = c(Z, X[i] + Y[i]) # this take about 25 seconds
+}
+```
+
+However, this is extremely inefficient in R. First, it reallocates the vector Z 100 000 times, increasing its length by one each time.   
+Since we know the length of Z in advance, we could allocate it once, and modify its entries:
+```{r}
+Z = rep(NA, 100000)
+for (i in 1:100000) {
+  Z[i] = X[i] + Y[i] # this take about 0.88 seconds
+}
+Z=X+Y
+```
+
+
+##5.Simulation
+
+
+###Some command of the random variables of distributions
+
+
+####Uniform random variable
+
+(1)
+>runif(n, min = a, max = b)
+
+
+Execution of this command produces n pseudorandom uniform numbers on the interval [a, b].   
+The default values are a = 0 and b = 1. The seed is selected internally.
+
+For example,
+```{r}
+runif(5)
+runif(10,min=-3,max=10)
+```
+
+
+---------------------------------------------------------
+
+(2)
+>set.seed()
+
+This would be useful when debugging a program that uses random numbers, or in other situations where repeatability is needed.
+
+For example,
+```{r}
+set.seed(32789)  # this ensures that your output will match ours
+runif(5)
+
+set.seed(100)
+runif(10,min=-3,max=10)
+
+set.seed(100)
+runif(10,min=-3,max=10)
+
+set.seed(100)
+runif(10,min=-3,max=10)
+```
+
+
+**Example17**
+```{r}
+set.seed(23207) # use this to obtain our output
+guesses <- runif(20)
+correct.answers <- (guesses < 0.2)
+correct.answers
+```
+
+
+The total number of correct guesses and incorrect guesses canbe calculate:
+```{r}
+table(correct.answers)
+```
+
+**Example18**
+```{r}
+round(1.123,2)
+
+u2 <- runif(1000)
+u1 <- runif(1000)
+X <- u1+u2
+Y <- u1-u2
+plot(Y ~ X)
+```
+
+```{r}
+cor(X,Y)
+```
+
+```{r}
+u2 <- runif(1000)
+u1 <- runif(1000)
+cor(u1,u2)
+```
+
+------------------------------------------
+
+####Binomial random variable
+
+(3)
+>dbinom(x, size, prob)
+
+Here, size and prob are the binomial parametersmand p, respectively,while x denotes the number of “successes.”  
+The output from this function is the value of P(X = x).
+
+For example,
+```{r}
+dbinom(x = 4, size = 6, prob = 0.5)
+```
+
+Thus, P(X = 4) = 0.234, when X is a binomial random variable with m = 6 and p = 0.5.
+
+-----------------------------
+
+
+(4)
+>pbinom():Cumulative probabilities of the form P(X<=x)  
+>qbinom():Gives the quentilies for the binomial distribution.
+
+
+```{r}
+pbinom(4, 6, 0.5)
+qbinom(0.89, 6, 0.5)
+```
+
+------------------------------
+
+(5)
+>rbinom(n, size, prob)
+
+Here, size and prob are the binomial parameters, while n is the
+number of variates generated.  
+
+For example:
+```{r}
+defectives <- rbinom(24, 15, 0.1)
+defectives
+any(defectives>5)
+```
+   
+**Example19**   
+Simulate 10000 binomial pseudorandim numbers with parameters 20 and 0.3,assigning them to a vector called binsim.  
+Let X be a binomial (20.03) random variable.  
+Use the simulated numbers to estimate the following
+
+```{r}
+binsim <- rbinom(10000,20,0.3)
+#(a)P(X<=5) #usepbinim
+sum(binsim <= 5)/10000
+
+pbinom(5,20,0.3) #pbinom(x,size,prob)
+#(b)P(X=5) #use dbinom
+sum(binsim =5)/10000
+
+dbinom(5,20,0.3)
+
+#(c)E[X]
+mean(binsim)
+
+true_mean <- 20*0.3
+true_mean
+
+#(d)Var(X)
+var(binsim)
+
+
+true_var <- 20*0.3*0.7
+#(e)the 95th percentile of X(use quantile() function)
+quantile(binsim,0.95)
+
+
+qbinom(0.95,20,0.3) #機率p對應之分位數
+
+#(f)the 99th percentile of X
+quantile(binsim,0.99)
+
+qbinom(0.99,20,0.3)
+
+#(g)the 99.9999th quantile of X
+quantile(binsim,0.999999)
+
+qbinom(0.999999,20,0.3)
+#need a large amount of pseudorandom numbers to estimate the exstreme quantiles accurately
+```
+
+----------------------------
+
+
+####Poisson random variable
+
+
+(6)
+>dpois(x, lambda)
+
+Here, lambda is the Poisson rate parameter, while x is the number of Poisson events.  
+The output from the function is the value of P(X = x).
+
+For example:
+
+```{r}
+dpois(x = 3, lambda = 0.5)
+```
+
+Therefore, P(X = 3) = 0.0126, if X is Poisson random variable with mean 0.5.
+
+------------------------------
+
+(7)
+>rpois(n, lambda)
+
+The parameter n is the number of variates produced, and lambda is as above.  
+
+For example:
+```{r}
+rpois(10, 3.7)
+```
+
+-------------------------------
+
+
+####Exponential random variable
+
+
+(8)
+>pexp(q, rate)
+
+The output from this is the value of P(T ≤ q), where T is an exponential random variable with parameter rate.
+
+For example:
+```{r}
+pexp(1, rate = 3)
+```
+
+Thus, P(X ≤ 1) = 0.95, when X is an exponential random variable with a rate of 3.
+
+-------------------------
+
+(9)
+>rexp(n, rate)
+
+The R function rexp() can be used to generate n random exponential variates.
+
+For example:
+```{r}
+X <- rexp(25, rate = 1.5)
+cumsum(x)
+```
+
+------------------------
+
+####Normal random variable
+
+(10)
+>dnorm() :The normal density function.  
+pnorm() :The distribution function.  
+qnorm() :The quantiles of the normal distribution.
+
+For example,the 95th percentile of the normal distribution with a mean of 2.7 and a standard deviation of 3.3 is:
+```{r}
+qnorm(0.95, mean = 2.7, sd = 3.3)
+```
+
+
+
+(11)
+>rnorm(n, mean, sd)
+
+Normal pseudorandom variables can be generated using the rnorm() function in R.This produces n normal pseudorandom variates which have mean mean and standard deviation sd.
+
+For example,we can simulate 10 independent normal variates with a mean of −3 and a standard deviation of 0.5 using:
+```{r}
+rnorm(10, -3, 0.5)
+```
+
+**Example20**  
+Simulate x from the standard normal distribution, conditional on the event that 0 < x < 3. We will simulate from the entire normal distribution and then accept only those values which lie between 0 and 3.
+```{r}
+x <- rnorm(100000) # simulate from the standard normal
+x <- x[(0 < x) & (x < 3)] # reject all x’s outside (0,3)
+hist(x, probability=TRUE) # show the simulated values
+```
+
+
+###Monte Carlo integration
+
+Suppose g(x) is any function that is integrable on the interval [a, b].  
+The integral $\int_{a}^{b}$ $g(x)$   give the area of the region with a<x<b and y between 0 and g(x).  
+
+
+**Example21**  
+
+1.$\int_{0}^{\infty}$ $e^{-x^3}$
+
+```{r}
+set.seed(1)
+x <- rexp(100000)
+mean(exp(-x)^3/dexp(x))
+```
+
+2.$\int_{0}^{3}$ $sin(e^{x})$
+
+```{r}
+set.seed(1)
+x<-runif(100000,min=0,max=3)
+mean(sin(exp(x)))*3
+```
+
+3.$\int_{0}^{3}$ $\frac{1}{\sqrt{2\pi}}$ $e^{\frac{-x^2}{2}}$
+
+```{r}
+set.seed(1)
+x<-runif(100000,min=0,max=3)
+mean((1/sqrt(2*pi))*exp((-x^2)/2))*3
+```
+
+
+###Rejection sampling
+
+We will show how to use rejection sampling to draw a random sample from a univariate density or probability function g(x), using a sequence of two examples
+
+**Example22**
+
+```{r}
+k=0.45403
+g=function(x)0.5*exp(-(x^1.5))/k
+X<-rexp(100000)
+W<-g(X)/dexp(X) #dexp:返回概率密度
+mean<-weighted.mean(X,W) #weighted.mean 加權平均函數
+mean
+```
+
+
+**Example23**
+
+```{r}
+kg=function(x)0.5*exp(-(x^1.5))
+X=rexp(100000)
+U=runif(100000)
+# accept only those X
+X=X[ U*dexp(X) < kg(X) ]
+hist(X, freq = FALSE, breaks="Scott")
+k=length(X) / 100000
+g=function(x)kg(x) / k
+curve(g, from=0, to=max(X), add=TRUE)
+fbyk=function(x)dexp(x) / k
+curve(fbyk, from=0, to=max(X), add=TRUE, lty=2)
+```
+
+
+##6.Computing linear algebra
+
+Linear algebra deals with vector spaces and linear operations on them. In mathematics, we usually represent vectors as column vectors of numbers, and linear operations as matrices. 
+
+###Constructing matrix objects
+
+Syntax                       | function
+-----------------------------|-----------------------------
+matrix(data, nrow, ncol)     |data is a vector of nrow*ncol values
+cbind(d1, d2, ..., dm)       |d1, ..., dm are vectors (columns)
+rbind(d1, d2, ..., dn)       |d1, ..., dn are vectors (rows)
+
+
+For example,
+```{r}
+H3 <- matrix(c(1, 1/2, 1/3, 1/2, 1/3, 1/4, 1/3, 1/4, 1/5), nrow=3)
+H3
+```
+
+```{r}
+cbind(seq(1, 3), seq(2, 4), seq(3, 5))
+```
+
+```{r}
+1/cbind(seq(1, 3), seq(2, 4), seq(3, 5))
+```
+
+
+
+```{r}
+matrix(seq(1, 12), nrow=3)
+```
+
+```{r}
+x <- seq(1, 3)
+x2 <- x^2
+X <- cbind(x, x2)
+X
+```
+
+```{r}
+X<-matrix(c(1,2,3,1,4,9),ncol=2)
+X
+```
+
+###Accessing matrix elements
+
+**Example24**
+```{r}
+X[3,2]
+X[3,]
+
+X[3,,drop=FALSE]
+X[,2,drop=FALSE]
+
+colnames(X)
+
+rownames(X)
+
+rownames(X)<-c("obs1","obs2","obs3")
+X
+```
+
+
+```{r,eval=FALSE}
+X[,"x"]
+```
+
+
+###Matrix properties
+
+
+The dimension of a matrix is its number of rows and its number of columns.  
+The diagonal elements can be obtained using the diag() function.
+```{r}
+dim(X)
+
+diag(X)
+
+y=cbind(seq(1,3),seq(2,4),seq(3,5))
+diag(y)
+diag(diag(y))
+diag(1:6)
+```
+
+The t() function is used to calculate the matrix transpose $X^T$ :
+```{r}
+t(X)
+```
+
+
+###Some apply of  matrix
+
+upper triangular mayrix
+```{r}
+Hnew=H3=y
+Hnew[upper.tri(H3,diag=TRUE)]<-0
+Hnew
+```
+
+
+```{r}
+x=matrix(1:6,nrow=3)
+y=matrix(c(3,4,5,7,7,7),ncol=2)
+x
+y
+```
+
+```{r}
+x*y
+x%%y
+
+solve(t(x)%*%y)
+```
+
+
+>solve() 
+
+求逆矩陣(square matrix)
+
+```{r}
+set.seed(1)
+z=matrix(rnorm(9),nrow=3)
+z
+solve(z) 
+```
+
+>crossprod()
+
+The crossprod()function is a somewhat more efficient way to
+calculate $Y^T$ $X$
+```{r}
+crossprod(y,x)
+```
+
+
+**Example25**
+```{r}
+x0=rep(1,6)
+x1=10:15
+A=cbind(x0,x1,x1^2,x1^3,x1^4,x1^5)
+b=c(25,16,26,19,21,20)
+out=solve(A,b)
+names(out)=paste("a",0:5,sep="")
+out
+```
+
+**Example26**
+```{r}
+X <- matrix(c(1, 2, 3, 1, 4, 9), ncol=2)
+X_t <- t(X)
+X_t_X <- X_t %*% X
+X_inv <- solve(X_t_X)
+H <- X %*% X_inv %*% X_t
+H
+```
+
+>eigen()
+
+Eigenvalues and eigenvectors can be computed using the function eigen().
+
+
+```{r}
+eigen(H)
+eigen(H)$values #[1] 1.000000e+00 1.000000e+00 6.661338e-16
+eigen(H)$vectors
+
+
+trace=function(data) sum(diag(data))
+trace(H)
+sum(eigen(H)$values)
+##the trace of the matrix H and the sum of the eigenvalues are the same
+
+det(H)
+prod(eigen(H)$values)
+##they are close to zero
+```
+
+Definition: If H%*%x=a*x, then x is an eigenvector of H and a is an eigenvalue of H
+```{r}
+H%*%X[,1]
+X[,1]
+H%*%X[,2]
+X[,2]
+# Because H%*%X[,1]=1*X[,1], X[,1] is an eigenvector
+# Because H%*%X[,2]=1*X[,2], X[,2] is an eigenvector
+
+H%*%((diag(1,3)-H)[,1])
+H%*%((diag(1,3)-H)[,2])
+H%*%((diag(1,3)-H)[,3])
+#H%*%((diag(1,3)-H)[,1])=0*(diag(1,3)-H)[,1], (diag(1,3)-H)[,1] is an eigenvector
+#H%*%((diag(1,3)-H)[,2])=0*(diag(1,3)-H)[,2], (diag(1,3)-H)[,2] is an eigenvector
+#H%*%((diag(1,3)-H)[,3])=0*(diag(1,3)-H)[,3], (diag(1,3)-H)[,3] is an eigenvector
+
+H3=matrix(c(1,1/2,1/3,1/2,1/3,1/4,1/3,1/4,1/5),nrow=3)
+```
+
+
+>svd()
+
+The singular value decomposition can be obtained using the function
+svd(). 
+
+```{r}
+H3.svd <- svd(H3)
+H3.svd
+H3.svd$d
+H3.svd$u
+H3.svd$v
+```
+
+We can verify that these components can be multiplied in the appropriate way to reconstruct H3:
+```{r}
+H3.svd$u %*% diag(H3.svd$d) %*% t(H3.svd$v)
+```
+
+Because of the properties of the U, V and D matrices, the singular value decomposition provides a simple way to compute a matrix inverse.  
+
+For example,$H_{3}^{-1}$= $V$ $D^{-1}$ $U^{T}$ can be recalculated as
+```{r}
+H3.svd$v %*% diag(1/H3.svd$d) %*% t(H3.svd$u)
+```
+
+>chol()
+
+If a matrix A is positive definite, it possesses a square root. In fact, there are usually several matrices B such that $B^{2}$ =$A$.  
+We can use chol() to find an _upper triangular matrix_ U such that $U^{T}$ $U$ = $A$.  
+
+For example,
+```{r}
+H3.chol <- chol(H3)
+H3.chol
+crossprod(H3.chol, H3.chol)
+```
+
+>chol2inv()
+
+Once the Choleski decomposition of a matrix $A$ = $U^{T}$ $U$ has been obtained, we can compute the inverse of A using the fact that $A^{−1}$ =$U^{−1}$ $U^{−T}$
+```{r}
+chol2inv(H3.chol)
+```
+
+>qr()  
+qr.Q()  
+qr.R()  
+
+
+Another way of decomposing a matrix A is via the QR decomposition $A$ = $Q$ $R$, where Q is an orthogonal matrix, and R is an upper triangular matrix.  
+This decomposition can be applied even if A is not square.  
+
+To obtain the decomposition, we use the qr() function.    
+The functionsqr.Q() and qr.R() can be applied to this object to obtain the explicit Q and R matrices. 
+
+
+**Example26**
+```{r}
+H3.qr <- qr(H3)
+H3.qr
+H3.qr$qr
+H3.qr$rank
+H3.qr$qraux
+H3.qr$pivot
+
+Q <- qr.Q(H3.qr)
+Q
+R <- qr.R(H3.qr)
+R
+```
+
+We can recover $H_3$ by multiplying Q by R:
+```{r}
+Q%*%R
+```
+
+
+>kappa()
+
+The function kappa() can be used to compute the condition number of a given matrix (the ratio of the largest to smallest nonzero singular values).
+
+```{r}
+kappa(H3)
+```
+
+
+>outer()
+
+The function outer() is sometimes useful in statistical calculations.  
+It can be used to perform an operation on all possible pair of elements coming from two vectors.
+
+```{r}
+x1 <- seq(1, 5)
+outer(x1, x1, "/")
+```
+
+Replacing the division operation with the subtraction operator gives all pairwise differences:
+```{r}
+outer(x1, x1, "-")
+```
+
+The third argument can be any function that takes two vector arguments.  
+The second argument can differ from the first. 
+```{r}
+y <- seq(5, 10)
+outer(x1, y, "+")
+```
+
+>apply()
+
+It is sometimes necessary to apply the same function to each of the rows of a matrix, or to each of the columns.  
+A for() loop could be used, but it is sometimes more efficient computationally to use the apply() function.
+
+```{r}
+apply(H3, 1, sum)
+```
+
+**Example27**
+```{r}
+apply(H3,1,function(x)sqrt(sum(x^2)))
+
+x=cbind(x1=3,x2=c(4:1,2:5))
+dimnames(x)[[1]]=letters[1:8]
+apply(x,2,mean,trim=.2)
+
+dimnames(x)
+
+names(dimnames(x))=c("row","col")
+```
+
+
+
+##Numerical optimization
+
+###The golden section search method
+
+The golden section search method is a simple way of finding the minimizer of a single-variable function which has a singl minimum on the interval [a, b].  
+
+
+
+**Example28**  
+
+Consider minimizing the function $f(x)$ =$|x-3.5|$+ $(x-2)^{2}$ on the interval[0,5]
+```{r}
+f=function(x){
+  abs(x-3.5)+(x-2)^2
+}
+
+curve(f,from=1,to=5)
+```
+
+
+**Example29**
+```{r}
+golden=function(f,a,b,tol=0.0000001){
+  ratio=2/(sqrt(5)+1)
+  x1=b-ratio*(b-a)
+  x2=a+ratio*(b-a)
+  
+  f1=f(x1)
+  f2=f(x2)
+  
+  while(abs(b-a)>tol) {
+    if(f2>f1){
+      b=x2
+      x2=x1
+      f2=f1
+      x1=b-ratio*(b-a)
+      f1=f(x1)
+    } else{
+      a=x1
+      x1=x2
+      f1=f2
+      x2=a+ratio*(b-a)
+      f2=f(x2)
+    }
+  }
+  return((a+b)/2)
+}
+
+
+golden(f,1,5)
+```
+
+
+```{r}
+section.s=function(f,a,b,tol=0.0000001,s=1/3){
+  x2=b-s*(b-a)
+  x1=a+s*(b-a)
+  
+  f1=f(x1)
+  f2=f(x2)
+  
+  while(abs(b-a)>tol) {
+    if(f2>f1){
+      b=x2
+    } else{
+      a=x1
+      x1=x2
+      f1=f2
+    }
+    x2=b-s*(b-a)
+    x1=a+s*(b-a)
+    f1=f(x1)
+    f2=f(x2)
+    
+    
+  }
+  return((a+b)/2)
+}
+
+
+section.s(f,1,5)
+```
+
+
+###Built in function
+
+>optim(par, fn, ...)
+
+The "par" parameter to optim() gives starting values for the parameters.  
+Besides telling optim() where to begin, these indicate how many parameters will vary in its calls to fn, the second parameter.  
+"fn" is an R function which evaluates the function to be minimized.  
+
+Its first argument should be a vector of the same length as "par".optim() will call it repeatedly  
+
+The optim() function has a number of optional parameters described on its help page. Besides those, the optional parameters in the ... list could include additional parameters to pass to "fn".
+
+```{r}
+
+f2=function(x)((x[1]-x[2])^2+(x[1]-2)^2+(x[2]-3)^4)/10
+
+optim(c(1,1),f2)
+
+
+f3=function(x){abs(x-3.5)+abs(x-2)+abs(x-1)}
+optimize(f3,c(-10,10))
+```
+
+
+###Solving linear programming problems in R
+
+
+There is more than one linear programming function available in R, but we believe the lp() function in the _lpSolve_ package may be the most stable version currently available.  
+
+
+
+The lp() function has a number of parameters; the following are needed to solve minimization problems like the one in the earlier example:  
+
+parameter        |function
+-----------------|-----------------
+objective.in –   |the vector of coefficients of the objective function
+const.mat –      |a matrix containing the coefficients of the decision variables in the left hand side of the constraints; each row corresponds to a constraint
+const.dir –      | a character vector indicating the direction of the constraint inequalities; some of the possible entries are >=, == and <=
+const.rhs –      |a vector containing the constants given on the right-hand side of the constraints.
+
+```{r}
+library(lpSolve)
+
+eg.lp=lp(objective.in=c(5,8),
+         const.mat=matrix(c(1,1,1,2),nrow=2),
+         const.rhs=c(2,3),const.dir=c(">=",">="))
+eg.lp
+
+eg.lp$solution
+```
+
+
+The lp() function can handle maximization problems with the use of the direction="max" parameter.  
+Furthermore, the const.dir parameter allows for different types of inequalities.
+
+**Example29**  
+
+We will solve the problem:  
+maxC = 5X1 + 8X2  
+sunject to the constraints  
+x1+x2 $\leq$ 2  
+x1+2x2 = 3  
+x1,x2 $\geq$ 0
+```{r}
+eg.lp=lp(objective.in=c(5, 8),
+         const.mat=matrix(c(1, 1, 1, 2), nrow=2),
+         const.rhs=c(2, 3),
+         const.dir=c("<=", "="), direction="max")
+eg.lp$solution
+```
+
+
+
+
+
+
+
+
+
+
+
+
